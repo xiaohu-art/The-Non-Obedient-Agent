@@ -1,6 +1,0 @@
-seed: 29
-env_name: FrozenLake-v1
-train:
-  timesteps: 500
-agent: null
-buffer: null
