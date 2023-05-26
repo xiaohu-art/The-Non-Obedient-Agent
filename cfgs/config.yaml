@@ -1,11 +1,18 @@
 seed: 29
 env_name: FrozenLake-v1
+env_size: 8
+
+multi_agent: False
 
 train:
-  timesteps: 500
-  epsilon: 0.9
+  timesteps: 50_000
+  eps_max: 1
+  eps_min: 0.05
+  eps_steps: 12_500
 
-agent:
+Upper:
+
+Lower:
 
 buffer:
 

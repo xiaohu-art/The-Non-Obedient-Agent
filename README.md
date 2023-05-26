@@ -1,5 +1,9 @@
 # The Non Obedient Agents
 
+## Grid
++ Land: 0
++ Goal: 5
++ Hole: -1
 ## Agent
 
 + **Upper Agent**
