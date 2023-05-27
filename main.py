@@ -15,7 +15,8 @@ def main(cfg):
 
     utils.set_seed_everywhere(env, cfg.seed)
     grid = utils.get_grid(cfg.env_size, map[1:])
-
+    slippery = utils.get_slippery(cfg.env_size)
+    
     state_size = utils.get_space_shape(env.observation_space)
     action_size = utils.get_space_shape(env.action_space)
 
@@ -30,7 +31,7 @@ def main(cfg):
     uagent = UpperAgent()
     lagent = LowerAgent()
     
-    train(env, uagent, lagent, buffer, grid, cfg.train, seed=cfg.seed)
+    train(env, uagent, lagent, buffer, grid, slippery, cfg.train, seed=cfg.seed)
 
 if __name__ == "__main__":
     main()

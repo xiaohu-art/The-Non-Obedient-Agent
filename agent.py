@@ -17,7 +17,7 @@ class UpperAgent(DQNAgent):
         '''
         not implemented
         '''
-        return np.argmax(np.array([1, 0, 0, 0]))
+        return np.array([1, 0, 0, 0])
 
 class LowerAgent(DQNAgent):
     def __init__(self):
@@ -25,16 +25,19 @@ class LowerAgent(DQNAgent):
         self.map_size = 8
 
 
-    def get_observation(self, grid, state):
+    def get_observation(self, state, grid, slippery, message):
         loc = [state // 8, state % 8]
 
-        padding = np.pad(grid, ((1, 1), (1, 1)), 'constant', constant_values=-1)
-        window = padding[loc[0]:loc[0]+self.window_size, loc[1]:loc[1]+self.window_size]
+        grid_padding = np.pad(grid, ((1, 1), (1, 1)), 'constant', constant_values=-1)
+        grid_window = grid_padding[loc[0]:loc[0]+self.window_size, loc[1]:loc[1]+self.window_size]
         
-        return window.flatten()
+        slippery_padding = np.pad(slippery, ((1, 1), (1, 1)), 'constant', constant_values=0)
+        slippery_window = slippery_padding[loc[0]:loc[0]+self.window_size, loc[1]:loc[1]+self.window_size]
+
+        return np.concatenate((grid_window.flatten(), slippery_window.flatten(), message))
 
     def get_action(self, observation):
         '''
         not implemented
         '''
-        return 0.5, 0
+        return np.array([1, 0, 0, 0])

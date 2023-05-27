@@ -11,18 +11,22 @@
     + **Message**: Action Suggested by Upper Agent
 + **Lower Agent**
     + **Observation**: 3x3 Square Contians Where is Land and Hole
-    + **Belief**: The Range to believe Upper Agent $\in$ [0, 1]
+    + **Observation**: Action Suggested by Upper Agent
     + **Lower Action**: Action Suggested by Lower Agent
 
 ## Environment
 + **Frozen Lake**(8x8)
-+ **Frozen Lake**(8x8, slippery)
++ Every location has a prob to do other action
+
+## Reward
++ **Upper Agent**:  KL(upper action || lower action) + reward of finding goal
++ **Lower Agent**:  reward of finding goal
 
 ## Process
 + Initialize Environment
 + Upper agent gets observation
 + Upper agent outputs message
-+ Lower agent gets observation
-+ Lower agent outputs belief and its action
-+ Execuate action depend on epsilon-greedy and belief
-+ Environment step
++ Lower agent gets observation and message
++ Lower agent outputs its action
++ Execuate action depend on epsilon-greedy
++ Environment step and get reward

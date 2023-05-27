@@ -25,6 +25,9 @@ def get_grid(env_size, map: list):
 
     return grid
 
+def get_slippery(env_size):
+    return np.random.random((env_size, env_size))
+
 def get_space_shape(space):
     """
     Return the shape of the gym.Space object
