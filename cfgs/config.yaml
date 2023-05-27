@@ -2,19 +2,44 @@ seed: 29
 env_name: FrozenLake-v1
 env_size: 8
 
-multi_agent: False
-
 train:
   timesteps: 50_000
   eps_max: 1
   eps_min: 0.05
   eps_steps: 12_500
 
-Upper:
-
-Lower:
+agent:
+  gamma: 0.99
+  lr: 0.002
+  tau: 0.1
+  nstep: ${buffer.nstep}
+  target_update_interval: 3
+  hidden_size: 64
+  activation:
+    _target_: torch.nn.ELU
+  
 
 buffer:
+  capacity: 50_000
+  use_per: False
+  nstep: 1
+  gamma: ${agent.gamma}
+
+upper_buffer:
+  capacity: ${buffer.capacity}
+  use_per: ${buffer.use_per}
+  nstep: ${buffer.nstep}
+  gamma: ${agent.gamma}
+  state_size: 4
+  action_size: 4
+
+lower_buffer:
+  capacity: ${buffer.capacity}
+  use_per: ${buffer.use_per}
+  nstep: ${buffer.nstep}
+  gamma: ${agent.gamma}
+  state_size: 22  # 9 + 9 + 4
+  action_size: 4
 
 # hydra:
 #   job:

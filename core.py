@@ -25,11 +25,6 @@ def train(env, upper, lower, buffer, grid, slippery, cfg, seed=0):
 
         eps = get_epsilon(step-1, cfg.eps_min, cfg.eps_max, cfg.eps_steps)
 
-        if random.random() < eps:
-            action = env.action_space.sample()
-        else:
-            action = lower_action
-
         x, y = state // 8, state % 8
         if random.random() < slippery[x, y]:
             action = env.action_space.sample()
