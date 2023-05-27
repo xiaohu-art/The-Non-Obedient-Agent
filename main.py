@@ -23,12 +23,13 @@ def main(cfg):
 
     upper_buffer = get_buffer(cfg.upper_buffer, device=device)
     lower_buffer = get_buffer(cfg.lower_buffer, device=device)
+    buffer = (upper_buffer, lower_buffer)
 
-    buffer = [upper_buffer, lower_buffer]
     uagent = UpperAgent()
     lagent = LowerAgent()
+    agent = (uagent, lagent)
     
-    train(env, uagent, lagent, buffer, grid, slippery, cfg.train, seed=cfg.seed)
+    train(env, agent, buffer, grid, slippery, cfg.train, seed=cfg.seed)
 
 if __name__ == "__main__":
     main()

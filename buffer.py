@@ -34,7 +34,10 @@ class ReplayBuffer:
         state, action, reward, next_state, done = transition
 
         self.state[self.idx] = torch.tensor(state, dtype=torch.float32)
-        self.action[self.idx] = torch.tensor(action, dtype=torch.float32)
+
+        assert isinstance(action, torch.Tensor), 'action must be a tensor'
+        self.action[self.idx] = action
+        
         self.reward[self.idx] = torch.tensor(reward, dtype=torch.float32)
         self.next_state[self.idx] = torch.tensor(next_state, dtype=torch.float32)
         self.done[self.idx] = torch.tensor(done, dtype=torch.int)

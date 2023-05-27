@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 class DQNAgent:
     pass
@@ -17,7 +18,7 @@ class UpperAgent(DQNAgent):
         '''
         not implemented
         '''
-        return np.array([1, 0, 0, 0])
+        return torch.tensor([1, 0, 0, 0])
 
 class LowerAgent(DQNAgent):
     def __init__(self):
@@ -40,4 +41,4 @@ class LowerAgent(DQNAgent):
         '''
         not implemented
         '''
-        return np.array([1, 0, 0, 0])
+        return torch.tensor([1, 0, 0, 0])
