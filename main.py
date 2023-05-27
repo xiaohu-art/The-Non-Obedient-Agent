@@ -18,15 +18,17 @@ def main(cfg):
     grid = utils.get_grid(cfg.env_size, map[1:])
     slippery = utils.get_slippery(cfg.env_size)
 
-    state_size = utils.get_space_shape(env.observation_space)
-    action_size = utils.get_space_shape(env.action_space)
+    upper_state_size = cfg.upper_agent.state_size
+    upper_action_size = cfg.upper_agent.action_size
+    lower_state_size = cfg.lower_agent.state_size
+    lower_action_size = cfg.lower_agent.action_size
 
     upper_buffer = get_buffer(cfg.upper_buffer, device=device)
     lower_buffer = get_buffer(cfg.lower_buffer, device=device)
     buffer = (upper_buffer, lower_buffer)
 
-    uagent = UpperAgent()
-    lagent = LowerAgent()
+    uagent = UpperAgent(upper_state_size, upper_action_size, cfg.upper_agent, device=device)
+    lagent = LowerAgent(lower_state_size, lower_action_size, cfg.lower_agent, device=device)
     agent = (uagent, lagent)
     
     train(env, agent, buffer, grid, slippery, cfg.train, seed=cfg.seed)
