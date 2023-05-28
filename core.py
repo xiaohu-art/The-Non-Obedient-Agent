@@ -36,8 +36,8 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
 
         next_state, reward, done, truncated, info = env.step(lower_action)
 
-        upper_reward = int(lower_action==message) + reward
-        lower_reward = reward
+        upper_reward = int(lower_action==message) * 0.01 + reward
+        lower_reward = int(lower_action!=message) * 0.00 + reward
 
         upper_next_obs = upper.get_observation(next_state)
         upper_next_message = upper.get_action(upper_next_obs)
