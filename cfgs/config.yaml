@@ -1,4 +1,4 @@
-seed: 29
+seed: 17
 env_name: FrozenLake-v1
 env_size: 8
 
@@ -6,11 +6,13 @@ slippery: False
 
 train:
   nstep: ${buffer.nstep} 
-  timesteps: 100_000
+  timesteps: 10_000
   batch_size: 128
   eps_max: 1
   eps_min: 0.05
   eps_steps: 12_500
+  eval_interval: 2000
+  eval_episodes: 10
 
 
 upper_agent:
@@ -20,7 +22,7 @@ upper_agent:
   nstep: ${buffer.nstep}
   target_update_interval: 3
   state_size: 4
-  action_size: 1
+  action_size: 4
   hidden_size: 64
   activation:
     _target_: torch.nn.ELU
@@ -34,7 +36,7 @@ lower_agent:
   target_update_interval: 3
   state_size_slippery: 19  # 9 + 9 + 1
   state_size: 10  # 9 + 1
-  action_size: 1
+  action_size: 4
   hidden_size: 64
   activation:
     _target_: torch.nn.ELU

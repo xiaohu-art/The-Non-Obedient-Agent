@@ -1,6 +1,5 @@
 
 from hydra.utils import instantiate
-import torch
 import torch.nn as nn
 
 class QNetwork(nn.Module):

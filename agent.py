@@ -65,12 +65,13 @@ class DQNAgent:
 class UpperAgent(DQNAgent):
     def __init__(self, state_size, action_size, cfg, device="cuda"):
         super().__init__(state_size, action_size, cfg, device)
+        self.map_size = 8
 
     def get_observation(self, state):
-        col = state // 8
-        row = state % 8
+        col = state // self.map_size
+        row = state % self.map_size
 
-        return np.array([col, row, 15, 15], dtype=np.float32)
+        return np.array([col, row, self.map_size, self.map_size], dtype=np.float32)
 
 class LowerAgent(DQNAgent):
     def __init__(self, state_size, action_size, cfg, device="cuda"):
