@@ -55,8 +55,9 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
             upper_loss, _, upper_Q = upper.update(upper_batch, step)
             lower_loss, _, lower_Q = lower.update(lower_batch, step)
 
+            lower_buffer.reward
             if step % 50 == 0:
-                logger.info(f"Step: {step}, Upper Loss: {upper_loss}, Lower Loss: {lower_loss}, Upper Q: {upper_Q}, Lower Q: {lower_Q}")
+                logger.info(f"Step: {step}, Upper Loss: {upper_loss}, Lower Loss: {lower_loss}, Upper Q: {upper_Q}, Lower Q: {lower_Q}, Reward: {lower_buffer.reward.mean().item()}")
 
     upper_map = np.zeros((8, 8))
     lower_map = np.zeros((8, 8))
@@ -71,6 +72,9 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
 
             upper_map[i, j] = message
             lower_map[i, j] = lower_action
+            if grid[i, j] == -1:
+                upper_map[i, j] = -1
+                lower_map[i, j] = -1
 
     print(grid)
     print(slippery)
