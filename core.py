@@ -26,19 +26,16 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
         lower_obs = lower.get_observation(state, grid, slippery, message)
         lower_action = lower.get_action(lower_obs)
 
-        action = lower_action
-        # eps = get_epsilon(step-1, cfg.eps_min, cfg.eps_max, cfg.eps_steps)
-        # if random.random() < eps:
-        #     action = env.action_space.sample()
-        # else:
-        #     action = lower_action
+        eps = get_epsilon(step-1, cfg.eps_min, cfg.eps_max, cfg.eps_steps)
+        if random.random() < eps:
+            lower_action = env.action_space.sample()
         
         # x, y = state // 8, state % 8
         # if random.random() < slippery[x, y]:
         #     action = env.action_space.sample()
 
-        next_state, reward, done, truncated, info = env.step(action)
-        
+        next_state, reward, done, truncated, info = env.step(lower_action)
+
         upper_reward = int(lower_action==message) + reward
         lower_reward = reward
 
