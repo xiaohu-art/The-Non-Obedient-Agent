@@ -70,7 +70,7 @@ class UpperAgent(DQNAgent):
         col = state // 8
         row = state % 8
 
-        return np.array([col, row, 15, 15], dtype=np.float32)
+        return np.array([col, row, 7, 7], dtype=np.float32)
 
 class LowerAgent(DQNAgent):
     def __init__(self, state_size, action_size, cfg, device="cuda"):
