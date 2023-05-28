@@ -1,5 +1,8 @@
 import random
 import numpy as np
+import logging
+from utils import get_epsilon
+logger = logging.getLogger(__name__)
 
 def train(env, agent, buffer, grid, slippery, cfg, seed=0):
     '''
@@ -24,13 +27,19 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
         lower_action = lower.get_action(lower_obs)
 
         action = lower_action
-        x, y = state // 8, state % 8
-        if random.random() < slippery[x, y]:
-            action = env.action_space.sample()
+        # eps = get_epsilon(step-1, cfg.eps_min, cfg.eps_max, cfg.eps_steps)
+        # if random.random() < eps:
+        #     action = env.action_space.sample()
+        # else:
+        #     action = lower_action
+        
+        # x, y = state // 8, state % 8
+        # if random.random() < slippery[x, y]:
+        #     action = env.action_space.sample()
 
         next_state, reward, done, truncated, info = env.step(action)
         
-        upper_reward = int(action==message) + reward
+        upper_reward = int(lower_action==message) + reward
         lower_reward = reward
 
         upper_next_obs = upper.get_observation(next_state)
@@ -50,9 +59,8 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
             lower_loss, _, lower_Q = lower.update(lower_batch, step)
 
             if step % 50 == 0:
-                print(f"Step: {step}, Upper Loss: {upper_loss:.3f},\
-                       Lower Loss: {lower_loss:.3f}, Upper Q: {upper_Q:.3f}, Lower Q: {lower_Q:.3f}")
-    
+                logger.info(f"Step: {step}, Upper Loss: {upper_loss}, Lower Loss: {lower_loss}, Upper Q: {upper_Q}, Lower Q: {lower_Q}")
+
     upper_map = np.zeros((8, 8))
     lower_map = np.zeros((8, 8))
 

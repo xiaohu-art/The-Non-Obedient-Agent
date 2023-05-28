@@ -21,10 +21,19 @@ def main(cfg):
     upper_state_size = cfg.upper_agent.state_size
     upper_action_size = cfg.upper_agent.action_size
     lower_state_size = cfg.lower_agent.state_size
+    if cfg.lower_agent.slippery:
+        lower_state_size = cfg.lower_agent.state_size_slippery
+    
     lower_action_size = cfg.lower_agent.action_size
 
-    upper_buffer = get_buffer(cfg.upper_buffer, device=device)
-    lower_buffer = get_buffer(cfg.lower_buffer, device=device)
+    upper_buffer = get_buffer(cfg.buffer, 
+                              state_size = upper_state_size, 
+                              action_size = upper_action_size, 
+                              device=device)
+    lower_buffer = get_buffer(cfg.buffer, 
+                              state_size = lower_state_size, 
+                              action_size = lower_action_size, 
+                              device=device)
     buffer = (upper_buffer, lower_buffer)
 
     uagent = UpperAgent(upper_state_size, upper_action_size, cfg.upper_agent, device=device)

@@ -5,7 +5,7 @@ def get_buffer(cfg, **args):
     assert type(cfg.nstep) == int and cfg.nstep > 0, 'nstep must be a positive integer'
     if not cfg.use_per:
         if cfg.nstep == 1:
-            return ReplayBuffer(cfg.capacity, cfg.state_size, cfg.action_size, **args)
+            return ReplayBuffer(cfg.capacity, **args)
         else:
             return NStepReplayBuffer(cfg.capacity, cfg.nstep, cfg.gamma, **args)
     else:
