@@ -20,7 +20,7 @@ upper_agent:
   nstep: ${buffer.nstep}
   target_update_interval: 3
   state_size: 4
-  action_size: 1
+  action_size: 4
   hidden_size: 64
   activation:
     _target_: torch.nn.ELU
@@ -34,7 +34,7 @@ lower_agent:
   target_update_interval: 3
   state_size_slippery: 19  # 9 + 9 + 1
   state_size: 10  # 9 + 1
-  action_size: 1
+  action_size: 4
   hidden_size: 64
   activation:
     _target_: torch.nn.ELU
