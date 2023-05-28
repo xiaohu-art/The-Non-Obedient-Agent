@@ -18,7 +18,7 @@ class ReplayBuffer:
     def __init__(self, capacity, state_size, action_size, device):
         self.device = device
         self.state = torch.zeros((capacity, state_size), dtype=torch.float32)
-        self.action = torch.zeros((capacity, action_size), dtype=torch.float32)
+        self.action = torch.zeros((capacity, 1), dtype=torch.float32)
         self.reward = torch.zeros(capacity, dtype=torch.float32)
         self.next_state = torch.zeros((capacity, state_size), dtype=torch.float32)
         self.done = torch.zeros(capacity, dtype=torch.int)

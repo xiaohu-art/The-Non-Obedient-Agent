@@ -53,10 +53,9 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
         #     action = env.action_space.sample()
 
         next_state, reward, done, truncated, info = env.step(lower_action)
-        
-        upper_reward = int(lower_action==message) * 0.00 + reward
+
+        upper_reward = int(lower_action==message) * 0.01 + reward
         lower_reward = int(lower_action!=message) * 0.00 + reward
-        # lower_reward = reward
 
         upper_next_obs = upper.get_observation(next_state)
         upper_next_message = upper.get_action(upper_next_obs)
@@ -74,8 +73,9 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
             upper_loss, _, upper_Q = upper.update(upper_batch, step)
             lower_loss, _, lower_Q = lower.update(lower_batch, step)
 
+            lower_buffer.reward
             if step % 50 == 0:
-                logger.info(f"Step: {step}, Upper Loss: {upper_loss}, Lower Loss: {lower_loss}, Upper Q: {upper_Q}, Lower Q: {lower_Q}")
+                logger.info(f"Step: {step}, Upper Loss: {upper_loss}, Lower Loss: {lower_loss}, Upper Q: {upper_Q}, Lower Q: {lower_Q}, Reward: {lower_buffer.reward.mean().item()}")
 
         # if step % cfg.eval_interval == 0:
         #     eval_mean, eval_std = eval(env, agent, grid, slippery, cfg.eval_episodes, seed=seed)
@@ -94,6 +94,9 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
 
             upper_map[i, j] = message
             lower_map[i, j] = lower_action
+            if grid[i, j] == -1:
+                upper_map[i, j] = -1
+                lower_map[i, j] = -1
 
     print(grid)
     print(upper_map)
