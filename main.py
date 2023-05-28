@@ -28,11 +28,11 @@ def main(cfg):
 
     upper_buffer = get_buffer(cfg.buffer, 
                               state_size = upper_state_size, 
-                              action_size = upper_action_size, 
+                              action_size = 1, 
                               device=device)
     lower_buffer = get_buffer(cfg.buffer, 
                               state_size = lower_state_size, 
-                              action_size = lower_action_size, 
+                              action_size = 1, 
                               device=device)
     buffer = (upper_buffer, lower_buffer)
 

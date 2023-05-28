@@ -1,4 +1,4 @@
-seed: 29
+seed: 17
 env_name: FrozenLake-v1
 env_size: 8
 
@@ -6,11 +6,13 @@ slippery: False
 
 train:
   nstep: ${buffer.nstep} 
-  timesteps: 100_000
+  timesteps: 10_000
   batch_size: 128
   eps_max: 1
   eps_min: 0.05
   eps_steps: 12_500
+  eval_interval: 2000
+  eval_episodes: 10
 
 
 upper_agent:

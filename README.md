@@ -16,10 +16,9 @@
 
 ## Environment
 + **Frozen Lake**(8x8)
-+ Every location has a prob to do other action
 
 ## Reward
-+ **Upper Agent**:  KL(upper action || lower action) + reward of finding goal
++ **Upper Agent**:  reward of finding goal
 + **Lower Agent**:  reward of finding goal
 
 ## Process
@@ -30,3 +29,7 @@
 + Lower agent outputs its action
 + Execuate action depend on epsilon-greedy
 + Environment step and get reward
+
+是done 还是 truncated
+会不会从来没完成过
+upper reward + distance decrease
