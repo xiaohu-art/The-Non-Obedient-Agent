@@ -4,6 +4,7 @@ import gymnasium as gym
 import numpy as np
 import torch
 from gymnasium.spaces import Discrete, Box
+import matplotlib.pyplot as plt
 
 def set_seed_everywhere(env: gym.Env, seed=0):
     """
@@ -51,5 +52,30 @@ def get_epsilon(step, eps_min, eps_max, eps_steps):
         return eps_min
     else:
         return eps_max - (eps_max - eps_min) * step / eps_steps
+    
+def visualize(uplosses, lowlosses, up_Q, low_Q, upreward, lowreward):
+
+    plt.figure(figsize=(20, 6))
+
+    plt.subplot(1, 3, 1)
+    plt.plot(uplosses, label="Upper Loss")
+    plt.plot(lowlosses, label="Lower Loss")
+    plt.legend()
+    plt.title("Loss")
+
+    plt.subplot(1, 3, 2)
+    plt.plot(up_Q, label="Upper Q")
+    plt.plot(low_Q, label="Lower Q")
+    plt.legend()
+    plt.title("Q")
+
+    plt.subplot(1, 3, 3)
+    plt.plot(upreward, label="upper Reward")
+    plt.plot(lowreward, label="lower Reward")
+    plt.legend()
+    plt.title("Reward over the whole buffer")
+
+    plt.savefig("result.png")
+    plt.close()
     
     

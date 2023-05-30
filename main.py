@@ -42,5 +42,18 @@ def main(cfg):
     
     train(env, agent, buffer, grid, slippery, cfg.train, seed=cfg.seed)
 
+    env = gym.make(cfg.env_name, render_mode="human", map_name="8x8", is_slippery=False)
+    state, _ = env.reset(seed = cfg.seed)
+    done, truncated = False, False
+    while not (done or truncated):
+        upper_obs = uagent.get_observation(state)
+        message = uagent.get_action(upper_obs)
+
+        lower_obs = lagent.get_observation(state, grid, slippery, message)
+        lower_action = lagent.get_action(lower_obs)
+
+        state, reward, done, truncated, info = env.step(lower_action)
+        env.render()
+
 if __name__ == "__main__":
     main()

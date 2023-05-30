@@ -1,7 +1,7 @@
 import random
 import numpy as np
 import logging
-from utils import get_epsilon
+from utils import get_epsilon, visualize
 logger = logging.getLogger(__name__)
 
 def eval(env, agent, grid, slippery, episodes, seed):
@@ -32,6 +32,13 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
 
     done, truncated = False, False
     state, _ = env.reset(seed = seed)
+
+    uplosses = []
+    lowlosses = []
+    up_Q = []
+    low_Q = []
+    uprewards = []
+    lowrewards = []
 
     for step in range(1, cfg.timesteps + 1):
         if done or truncated:
@@ -73,13 +80,32 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
             upper_loss, _, upper_Q = upper.update(upper_batch, step)
             lower_loss, _, lower_Q = lower.update(lower_batch, step)
 
-            lower_buffer.reward
-            if step % 50 == 0:
-                logger.info(f"Step: {step}, Upper Loss: {upper_loss}, Lower Loss: {lower_loss}, Upper Q: {upper_Q}, Lower Q: {lower_Q}, Reward: {lower_buffer.reward.mean().item()}")
-
+            uplosses.append(upper_loss)
+            lowlosses.append(lower_loss)
+            up_Q.append(upper_Q)
+            low_Q.append(lower_Q)
+            uprewards.append(upper_buffer.reward.mean().item())
+            lowrewards.append(lower_buffer.reward.mean().item())
+            if step % 100 == 0:
+                logger.info(f"Step: {step}, Upper Loss: {upper_loss}, Lower Loss: {lower_loss}, Upper Q: {upper_Q}, Lower Q: {lower_Q}")
+                visualize(uplosses, lowlosses, up_Q, low_Q, uprewards, lowrewards)
         # if step % cfg.eval_interval == 0:
         #     eval_mean, eval_std = eval(env, agent, grid, slippery, cfg.eval_episodes, seed=seed)
         #     logger.info(f"Step: {step}, Eval Mean: {eval_mean}, Eval Std: {eval_std}")
+
+    # Eval
+    
+    state, _ = env.reset(seed = seed)
+    done, truncated = False, False
+    while not (done or truncated):
+        upper_obs = upper.get_observation(state)
+        message = upper.get_action(upper_obs)
+
+        lower_obs = lower.get_observation(state, grid, slippery, message)
+        lower_action = lower.get_action(lower_obs)
+
+        state, reward, done, truncated, info = env.step(lower_action)
+        env.render()
 
     upper_map = np.zeros((8, 8))
     lower_map = np.zeros((8, 8))
@@ -97,7 +123,7 @@ def train(env, agent, buffer, grid, slippery, cfg, seed=0):
             if grid[i, j] == -1:
                 upper_map[i, j] = -1
                 lower_map[i, j] = -1
-
-    print(grid)
-    print(upper_map)
-    print(lower_map)
+    
+    np.save(f"grid.npy", grid)
+    np.save(f"lower_map_{seed}.npy", lower_map)
+    np.save(f"upper_map_{seed}.npy", upper_map)

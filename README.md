@@ -29,7 +29,3 @@
 + Lower agent outputs its action
 + Execuate action depend on epsilon-greedy
 + Environment step and get reward
-
-是done 还是 truncated
-会不会从来没完成过
-upper reward + distance decrease
