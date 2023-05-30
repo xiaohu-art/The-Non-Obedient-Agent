@@ -10,7 +10,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 @hydra.main(config_path="cfgs", config_name="config", version_base="1.3")
 def main(cfg):
-    env = gym.make(cfg.env_name, render_mode="ansi", map_name="8x8", is_slippery=False)
+    env = gym.make(cfg.env_name, render_mode="ansi", map_name="8x8", is_slippery=cfg.slippery)
     env.reset(seed = cfg.seed)
     map = env.render().split("\n")
 
@@ -21,9 +21,6 @@ def main(cfg):
     upper_state_size = cfg.upper_agent.state_size
     upper_action_size = cfg.upper_agent.action_size
     lower_state_size = cfg.lower_agent.state_size
-    if cfg.lower_agent.slippery:
-        lower_state_size = cfg.lower_agent.state_size_slippery
-    
     lower_action_size = cfg.lower_agent.action_size
 
     upper_buffer = get_buffer(cfg.buffer, 
@@ -49,7 +46,7 @@ def main(cfg):
         upper_obs = uagent.get_observation(state)
         message = uagent.get_action(upper_obs)
 
-        lower_obs = lagent.get_observation(state, grid, slippery, message)
+        lower_obs = lagent.get_observation(state, grid, message)
         lower_action = lagent.get_action(lower_obs)
 
         state, reward, done, truncated, info = env.step(lower_action)

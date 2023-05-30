@@ -54,7 +54,7 @@ def get_epsilon(step, eps_min, eps_max, eps_steps):
         return eps_max - (eps_max - eps_min) * step / eps_steps
     
 def visualize(uplosses, lowlosses, up_Q, low_Q, upreward, lowreward):
-
+    
     plt.figure(figsize=(20, 6))
 
     plt.subplot(1, 3, 1)
@@ -70,8 +70,12 @@ def visualize(uplosses, lowlosses, up_Q, low_Q, upreward, lowreward):
     plt.title("Q")
 
     plt.subplot(1, 3, 3)
+    difference = np.array(upreward) - np.array(lowreward)
+    straight = np.ones_like(difference) * difference[-1]
     plt.plot(upreward, label="upper Reward")
     plt.plot(lowreward, label="lower Reward")
+    plt.plot(difference, label="Difference")
+    plt.plot(straight, label=None, linestyle="--")
     plt.legend()
     plt.title("Reward over the whole buffer")
 

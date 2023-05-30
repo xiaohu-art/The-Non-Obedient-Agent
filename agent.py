@@ -78,19 +78,11 @@ class LowerAgent(DQNAgent):
         super().__init__(state_size, action_size, cfg, device)
         self.window_size = 3
         self.map_size = 8
-        
-        self.slippery = cfg.slippery
 
-    def get_observation(self, state, grid, slippery, message):
+    def get_observation(self, state, grid, message):
         loc = [state // 8, state % 8]
 
         grid_padding = np.pad(grid, ((1, 1), (1, 1)), 'constant', constant_values=-1)
         grid_window = grid_padding[loc[0]:loc[0]+self.window_size, loc[1]:loc[1]+self.window_size]
         
-        slippery_padding = np.pad(slippery, ((1, 1), (1, 1)), 'constant', constant_values=0)
-        slippery_window = slippery_padding[loc[0]:loc[0]+self.window_size, loc[1]:loc[1]+self.window_size]
-
-        if self.slippery:
-            return np.concatenate((grid_window.flatten(), slippery_window.flatten(), np.array([message])), dtype=np.float32)
-        else:
-            return np.concatenate((grid_window.flatten(), np.array([message])), dtype=np.float32)
+        return np.concatenate((grid_window.flatten(), np.array([message])), dtype=np.float32)

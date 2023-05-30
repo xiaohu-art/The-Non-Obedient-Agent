@@ -18,7 +18,7 @@
 + **Frozen Lake**(8x8)
 
 ## Reward
-+ **Upper Agent**:  reward of finding goal
++ **Upper Agent**:  reward of finding goal + weight * obey
 + **Lower Agent**:  reward of finding goal
 
 ## Process
