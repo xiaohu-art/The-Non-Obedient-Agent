@@ -4,7 +4,7 @@ import utils
 import gymnasium as gym
 from core import train
 from buffer import get_buffer
-from agent import UpperAgent, LowerAgent
+from agent import UpperAgent, LowerAgent, DQNAgent
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -16,7 +16,6 @@ def main(cfg):
 
     utils.set_seed_everywhere(env, cfg.seed)
     grid = utils.get_grid(cfg.env_size, map[1:])
-    slippery = utils.get_slippery(cfg.env_size)
 
     upper_state_size = cfg.upper_agent.state_size
     upper_action_size = cfg.upper_agent.action_size
@@ -37,9 +36,30 @@ def main(cfg):
     lagent = LowerAgent(lower_state_size, lower_action_size, cfg.lower_agent, device=device)
     agent = (uagent, lagent)
     
-    train(env, agent, buffer, grid, slippery, cfg.train, seed=cfg.seed)
+    if not cfg.hierarchical:
+        state_size = cfg.agent.state_size
+        action_size = cfg.agent.action_size
+        agent = DQNAgent(state_size, action_size, cfg.agent, device=device)
+        buffer = get_buffer(cfg.buffer, 
+                            state_size=state_size, 
+                            action_size = 1, 
+                            device=device)
 
-    env = gym.make(cfg.env_name, render_mode="human", map_name="8x8", is_slippery=False)
+    train(env, agent, buffer, grid, cfg.train, seed=cfg.seed)
+    
+    if not cfg.hierarchical:
+        env = gym.make(cfg.env_name, render_mode="human", map_name="8x8", is_slippery=cfg.slippery)
+        state, _ = env.reset(seed = cfg.seed)
+        done, truncated = False, False
+        while not (done or truncated):
+            obs = agent.get_observation(state, grid)
+            action = agent.get_action(obs)
+
+            state, reward, done, truncated, info = env.step(action)
+            env.render()
+        return
+
+    env = gym.make(cfg.env_name, render_mode="human", map_name="8x8", is_slippery=cfg.slippery)
     state, _ = env.reset(seed = cfg.seed)
     done, truncated = False, False
     while not (done or truncated):

@@ -18,13 +18,20 @@ class DQNAgent:
         self.tau = cfg.tau
         self.gamma = cfg.gamma ** cfg.nstep
 
+        self.window_size = 3
+
     def soft_update(self, target, source):
         for target_param, param in zip(target.parameters(), source.parameters()):
             target_param.data.copy_(target_param.data * (1.0 - self.tau) + param.data * self.tau)
 
     @torch.no_grad()
-    def get_observation():
-        pass
+    def get_observation(self, state, grid):
+        loc = [state // 8, state % 8]
+
+        grid_padding = np.pad(grid, ((1, 1), (1, 1)), 'constant', constant_values=-1)
+        grid_window = grid_padding[loc[0]:loc[0]+self.window_size, loc[1]:loc[1]+self.window_size]
+        
+        return np.array(grid_window.flatten(), dtype=np.float32).reshape(1, -1)
     
     @torch.no_grad()
     def get_action(self, state):

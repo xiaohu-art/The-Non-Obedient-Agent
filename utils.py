@@ -26,9 +26,6 @@ def get_grid(env_size, map: list):
 
     return grid
 
-def get_slippery(env_size):
-    return np.random.random((env_size, env_size))
-
 def get_space_shape(space):
     """
     Return the shape of the gym.Space object
@@ -82,4 +79,25 @@ def visualize(uplosses, lowlosses, up_Q, low_Q, upreward, lowreward):
     plt.savefig("result.png")
     plt.close()
     
+def visualize_(losses, Qs, rewards):
+        
+    plt.figure(figsize=(20, 6))
+
+    plt.subplot(1, 3, 1)
+    plt.plot(losses, label="Loss")
+    plt.legend()
+    plt.title("Loss")
+
+    plt.subplot(1, 3, 2)
+    plt.plot(Qs, label="Q")
+    plt.legend()
+    plt.title("Q")
+
+    plt.subplot(1, 3, 3)
+    plt.plot(rewards, label="Reward")
+    plt.legend()
+    plt.title("Reward over the whole buffer")
+
+    plt.savefig("result.png")
+    plt.close()
     
